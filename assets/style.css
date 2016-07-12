@@ -1,0 +1,46 @@
+h1 {
+    color:red;
+    font-size: 60px;
+    font-style: bold;
+    font-family:fantasy;
+}
+h2 {color:red;
+    font-size: 25px;
+    font-family:impact,fantasy;
+  }
+
+/*body {
+    background-image: url("../assets/supman.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: 500px auto auto 500px;
+}*/
+
+body {
+        background: url('../assets/superman.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+}
+
+.gold {
+    color:blue;
+}
+.red {
+  color: red;
+}
+.letterS{
+color:gold;
+}
+.blue{
+  color:blue;
+}
+p{font-family: arial;}
+ul{font-family:arial;}
+a{font family:arial;}
+.Marketingheader {
+  Color: blue;
+  font-family:arial;
+}
