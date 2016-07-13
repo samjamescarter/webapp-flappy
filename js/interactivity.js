@@ -8,9 +8,10 @@ jQuery("#credits").on("click", function() {
     );
 });
 
-function registerScore (score);
+function registerScore (score){
 var playerName = prompt("What's your name?");
 var scoreEntry = "<li>" + playerName + ":" + score.toString() + "</li>";
+}
 
 function gameOver(){
     registerScore(score);

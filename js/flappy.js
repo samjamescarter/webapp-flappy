@@ -8,9 +8,8 @@ var stateActions = {preload: preload, create: create, update: update};
 // - element where the game will be drawn ('game')
 // - actions on the game state (or null for nothing)
 
-var score;
 var labelScore;
-var score;
+var score=0;
 var player;
 var game = new Phaser.Game(790, 400, Phaser.AUTO, 'game', stateActions);
 var pipes = [];
@@ -95,7 +94,9 @@ function update() {
 }
 
 function gameOver(){
-  location.reload();
+  registerScore(score);
+  score=0;
+  game.state.restart();
 }
 
 
