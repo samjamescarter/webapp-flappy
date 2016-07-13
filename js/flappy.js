@@ -13,6 +13,9 @@ var score=0;
 var player;
 var game = new Phaser.Game(790, 400, Phaser.AUTO, 'game', stateActions);
 var pipes = [];
+var background;
+var balloons =[];
+
 
 
 /*
@@ -22,7 +25,10 @@ function preload() {
   game.load.image("backgroundImg", "../assets/buildings.jpg");
   game.load.image("playerImg", "../assets/flappy_superman.png");
   game.load.audio("score", "../assets/point.ogg");
-  game.load.image("pipeBlock","../assets/pipe.png");
+  game.load.image("pipeBlock","../assets/pipe2-body.png");
+  game.load.image("pipeEnd","../assets/pipe2-end.png");
+  game.load.image("balloons","../assets/balloons.png");
+
 
 
 }
@@ -34,18 +40,15 @@ function create(){
   // set the background colour of the scene
 
 game.physics.startSystem(Phaser.Physics.ARCADE);
+background=game.add.tileSprite(0,0,790,400,"backgroundImg");
+background.scale.setTo(2.5,2.5);
+background.autoScroll(-100,0);
 
-  var bg = game.add.image(0,0,"backgroundImg");
-  bg.width = 790;
-  bg.height = 400;
 
-  game.stage.setBackgroundColor("#cc0000");
+
   game.add.text(300,20,"Flappy Superman",{font:"30px candara", fill: "#cccccc"});
-  game.add.sprite(10,270,"playerImg");
 
 
-
-  game.input.onDown.add(clickHandler);
 
   //alert(score);
   labelScore = game.add.text(20, 20, "0");
@@ -72,8 +75,13 @@ game.physics.startSystem(Phaser.Physics.ARCADE);
     var pipeInterval = 1.75 * Phaser.Timer.SECOND;
     game.time.events.loop(
         pipeInterval,
-        generatePipe
+        generate
     );
+
+score=0;
+
+player.anchor.setTo(0.5, 0.5);
+player.angle=30;
 
 
 
@@ -87,10 +95,20 @@ game.physics.startSystem(Phaser.Physics.ARCADE);
 function update() {
 
     game.physics.arcade.overlap(
-        player,
+        player,pipes,gameOver);
+        if(player.y<0|| player.y>400)
+        {gameOver();}
 
-		  pipes,
-		  gameOver);
+        for(var i = balloons.length - 1; i >= 0; i--){
+      game.physics.arcade.overlap(player, balloons[i], function(){
+
+if(player.body.gravity.y>100)
+        {player.body.gravity.y=player.body.gravity.y-50;}
+        balloons[i].destroy();
+        balloons.splice(i, 1);
+
+    });
+}
 }
 
 function gameOver(){
@@ -100,12 +118,6 @@ function gameOver(){
 }
 
 
-
-function clickHandler(event){
-  game.add.sprite(60, 20, "playerImg");
-  alert("The position is: " + event.x + "," + event.y,"playerImg");
-  game.add.sprite(event.x, event.y, "playerImg");
-}
 
 function playerJump() {
   player.body.velocity.y=-200;
@@ -133,7 +145,7 @@ function generatePipe() {
   var gap  = game.rnd.integerInRange(1, 5);
   for(var count=0; count<8; count++){
     if(count != gap && count !=gap+1) {
-      addPipeBlock(750, count*50);
+      addPipeBlock(900, count*50);
     }
   }
   changeScore();
@@ -141,9 +153,27 @@ function generatePipe() {
 function addPipeBlock(x, y) {
   // create a new pipe block
   var pipeBlock = game.add.sprite(x,y,"pipeBlock");
+  pipeBlock.width = 40;
+  pipeBlock.height = 50;
   // insert it in the 'pipes' array
   pipes.push(pipeBlock);
   game.physics.arcade.enable(pipeBlock);
   pipeBlock.body.velocity.x = -200;
 
+}
+function generateBalloons(){
+    var bonus = game.add.sprite(900,400, "balloons");
+    balloons.push(bonus);
+    game.physics.arcade.enable(bonus);
+    bonus.body.velocity.x = - 200;
+    bonus.body.velocity.y = - game.rnd.integerInRange(20, 100);
+}
+
+function generate() {
+    var diceRoll = game.rnd.integerInRange(1, 4);
+    if(diceRoll==1) {
+        generateBalloons();
+    } else {
+        generatePipe();
+    }
 }

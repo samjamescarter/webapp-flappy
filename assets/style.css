@@ -44,3 +44,7 @@ a{font family:arial;}
   Color: blue;
   font-family:arial;
 }
+
+.col-md-1 {
+background-color: #FFFFFF;
+}
